@@ -1,4 +1,4 @@
-(defproject sv.gcloud/client "0.1.0-SNAPSHOT"
+(defproject sv.gcloud/client "0.1.0"
   :description "A client to talk to the Google Cloud API (based on clj-http)."
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
