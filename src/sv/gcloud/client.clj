@@ -18,8 +18,8 @@
       (client
        (assoc-in
         request
-        [:query-params :access_token]
-        (.getAccessToken credential))))))
+        [:headers "Authorization"]
+        (str "Bearer " (.getAccessToken credential)))))))
 
 (defn create-client [config]
   (wrap-access-token
