@@ -6,4 +6,4 @@
                  [clj-http "2.0.0"]
                  [cheshire "5.5.0"]
                  [listora/again "0.1.0"]
-                 [com.google.api-client/google-api-client "1.19.1"]])
+                 [com.google.api-client/google-api-client "1.28.0"]])
