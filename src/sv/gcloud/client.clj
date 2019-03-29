@@ -4,7 +4,7 @@
 
 (defn wrap-access-token
   "Uses `GoogleCredential` to request and manage access tokens to
-   authorize requests to GCP APIs. Automatically refreshs expired
+   authorize requests to GCP APIs. Automatically refreshes expired
    access-tokens."
   [client config]
   (let [credential (GoogleCredential/getApplicationDefault)
