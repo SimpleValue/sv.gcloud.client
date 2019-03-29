@@ -18,7 +18,7 @@
 (defn http-status-5xx?
   "Is the status code 5xx (500-599)"
   [status-code]
-  (= (long (/ (long status-code) 100)) 5))
+  (<= 500 status-code 599))
 
 (defn http-status-retry?
   "Is the status code either a 5xx or a `too many request` (429)."
