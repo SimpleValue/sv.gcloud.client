@@ -1,0 +1,5 @@
+{:deps {org.clojure/clojure {:mvn/version "1.7.0"}
+        clj-http/clj-http {:mvn/version "2.0.0"}
+        cheshire/cheshire {:mvn/version "5.5.0"}
+        listora/again {:mvn/version "0.1.0"}
+        com.google.api-client/google-api-client {:mvn/version "1.28.0"}}}
