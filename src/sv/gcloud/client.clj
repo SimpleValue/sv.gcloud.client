@@ -5,9 +5,16 @@
 (defn wrap-access-token
   "Uses `GoogleCredential` to request and manage access tokens to
    authorize requests to GCP APIs. Automatically refreshes expired
-   access-tokens."
+   access-tokens.
+
+   Via the `config` map it is possible to define which
+   `:scopes` (https://developers.google.com/identity/protocols/oauth2/scopes)
+   should be requested. Furthermore you can provide your own
+   `com.google.api.client.googleapis.auth.oauth2.GoogleCredential`
+   instance via the `:credential` config map entry."
   [client config]
-  (let [credential (GoogleCredential/getApplicationDefault)
+  (let [credential (:credential config
+                                (GoogleCredential/getApplicationDefault))
         credential (if-let [scopes (:scopes config)]
                      (.createScoped credential scopes)
                      credential)]
