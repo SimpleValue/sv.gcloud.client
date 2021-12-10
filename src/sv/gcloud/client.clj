@@ -2,23 +2,20 @@
   (:import com.google.api.client.googleapis.auth.oauth2.GoogleCredential)
   (:require [clj-http.client :as c]))
 
-(defn wrap-access-token
+(defn application-default-get-access-token
   "Uses `GoogleCredential` to request and manage access tokens to
    authorize requests to GCP APIs. Automatically refreshes expired
    access-tokens.
 
    Via the `config` map it is possible to define which
    `:scopes` (https://developers.google.com/identity/protocols/oauth2/scopes)
-   should be requested. Furthermore you can provide your own
-   `com.google.api.client.googleapis.auth.oauth2.GoogleCredential`
-   instance via the `:credential` config map entry."
-  [client config]
-  (let [credential (:credential config
-                                (GoogleCredential/getApplicationDefault))
+   should be requested."
+  [config]
+  (let [credential (GoogleCredential/getApplicationDefault)
         credential (if-let [scopes (:scopes config)]
                      (.createScoped credential scopes)
                      credential)]
-    (fn [request]
+    (fn []
       (when (or (not (.getAccessToken credential))
                 (> (System/currentTimeMillis)
                    (-
@@ -26,11 +23,22 @@
                      credential)
                     (* 1000 60 10))))
         (.refreshToken credential))
-      (client
-       (assoc-in
-        request
-        [:headers "Authorization"]
-        (str "Bearer " (.getAccessToken credential)))))))
+      (.getAccessToken credential))
+    ))
+
+(defn wrap-access-token
+  "By default uses `application-default-get-access-token` to get an access-token fo r Google Cloud.
+
+   Via the `:get-access-token` `config` map entry it is possible to
+   provide an alternative no-arg function that gets an access-token."
+  [client config]
+  (let [get-access-token (or (:get-access-token config)
+                             (application-default-get-access-token config))]
+    (fn [request]
+      (client (assoc-in
+               request
+               [:headers "Authorization"]
+               (str "Bearer " (get-access-token)))))))
 
 (defn create-client
   "Creates a clj-http client (see `clj-http.client/request`) for
